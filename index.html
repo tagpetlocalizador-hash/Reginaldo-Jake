@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Meu Pet</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#e8f5e9;
+padding:30px;
+}
+
+.card{
+max-width:450px;
+margin:auto;
+background:white;
+border-radius:20px;
+padding:25px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+img{
+width:220px;
+height:220px;
+border-radius:50%;
+border:5px solid #4CAF50;
+object-fit:cover;
+margin-bottom:20px;
+}
+
+h1{
+color:#2E7D32;
+margin-bottom:15px;
+}
+
+p{
+margin-bottom:10px;
+font-size:18px;
+}
+
+.botao{
+display:block;
+margin:15px auto;
+padding:15px;
+width:100%;
+border-radius:10px;
+text-decoration:none;
+font-size:20px;
+font-weight:bold;
+}
+
+.ligar{
+background:#2196F3;
+color:white;
+}
+
+.whats{
+background:#25D366;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<img src="jake.jpeg">
+
+<h1>🐾 Jake</h1>
+
+<p><strong>Se encontrou este pet, entre em contato.</strong></p>
+
+<p><b>Tutor:</b> Reginaldo</p>
+
+<p><b>Telefone:</b> (47) 99930-5005</p>
+
+<a class="botao ligar" href="tel:+5547999305005">
+📞 Ligar
+</a>
+
+<a class="botao whats" href="https://wa.me/5547999305005">
+💬 WhatsApp
+</a>
+
+</div>
+
+<script>
+
+const urlEmail = "https://script.google.com/macros/s/AKfycbxc_xcogJ4jjE1HL9KjsqyLulsYhPpx7aZjK5RC-u8Pxlhjjis3sbb1L4EbdZgvJlMf/exec";
+
+if (navigator.geolocation) {
+
+navigator.geolocation.getCurrentPosition(
+
+function(posicao){
+
+let latitude = posicao.coords.latitude;
+let longitude = posicao.coords.longitude;
+
+fetch(
+urlEmail +
+"?lat=" + latitude +
+"&lon=" + longitude,
+{
+method:"GET",
+mode:"no-cors"
+}
+);
+
+},
+
+function(){
+
+alert("📍 Para acessar o conteúdo do Pet NFC, permita sua localização.");
+
+}
+
+);
+
+}
+
+</script>
+
+</body>
+</html>
