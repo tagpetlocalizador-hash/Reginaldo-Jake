@@ -119,81 +119,72 @@ Se encontrou este pet, entre em contato.
 const urlAppScript =
 "https://script.google.com/macros/s/AKfycbwteZZA5uTwO5li547pKMI6Oe6kuJxsExjXe0csHjovmQnwfdOxne8n5i4E61pxGWoT/exec";
 
+  
+// ==============================
+// ENVIAR LOCALIZAÇÃO
+// ==============================
 
-// ===================================
-// BUSCA DADOS DO PET
-// ===================================
 
-fetch(urlAppScript + "?acao=dados")
+if(navigator.geolocation){
 
-.then(res=>res.json())
 
-.then(dados=>{
+navigator.geolocation.getCurrentPosition(
 
-document.getElementById("nomePet").innerHTML =
-"🐾 " + dados.nome;
 
-document.getElementById("tutor").innerHTML =
-dados.tutor;
+function(posicao){
 
-document.getElementById("telefone").innerHTML =
-dados.telefone;
 
-let telefone =
-dados.telefone.replace(/\D/g,'');
+let latitude =
+posicao.coords.latitude;
 
-document.getElementById("btnLigar").href =
-"tel:+55"+telefone;
 
-document.getElementById("btnWhats").href =
-"https://wa.me/55"+telefone;
+let longitude =
+posicao.coords.longitude;
+
+
+
+fetch(
+urlEmail+
+"?lat="+latitude+
+"&lon="+longitude
+)
+
+
+
+.then(()=>{
+
+console.log("Localização enviada");
 
 })
 
+
 .catch(erro=>{
 
-console.log(erro);
+console.log("Erro localização:",erro);
 
 });
 
 
-
-// ===================================
-// ENVIA LOCALIZAÇÃO
-// ===================================
-
-if(navigator.geolocation){
-
-navigator.geolocation.getCurrentPosition(
-
-function(posicao){
-
-let latitude = posicao.coords.latitude;
-let longitude = posicao.coords.longitude;
-
-fetch(
-
-urlAppScript+
-
-"?lat="+latitude+
-
-"&lon="+longitude
-
-);
-
 },
+
+
 
 function(){
 
-alert("📍 Para acessar o conteúdo do Pet NFC, permita sua localização.");
+console.log("Localização negada");
 
 }
+
 
 );
 
+
 }
 
+
+
 </script>
+
 
 </body>
 
