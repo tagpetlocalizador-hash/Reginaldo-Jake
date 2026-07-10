@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
 <meta charset="UTF-8">
@@ -17,14 +18,11 @@ font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-
 background:#e8f5e9;
 padding:30px;
-
 }
 
 .card{
-
 max-width:450px;
 margin:auto;
 background:white;
@@ -32,36 +30,28 @@ border-radius:20px;
 padding:25px;
 text-align:center;
 box-shadow:0 5px 20px rgba(0,0,0,.2);
-
 }
 
 img{
-
 width:220px;
 height:220px;
 border-radius:50%;
 border:5px solid #4CAF50;
 object-fit:cover;
 margin-bottom:20px;
-
 }
 
 h1{
-
 color:#2E7D32;
 margin-bottom:15px;
-
 }
 
 p{
-
 margin-bottom:10px;
 font-size:18px;
-
 }
 
 .botao{
-
 display:block;
 margin:15px auto;
 padding:15px;
@@ -70,26 +60,22 @@ border-radius:10px;
 text-decoration:none;
 font-size:20px;
 font-weight:bold;
-
 }
 
 .ligar{
-
 background:#2196F3;
 color:white;
-
 }
 
 .whats{
-
 background:#25D366;
 color:white;
-
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -100,32 +86,44 @@ color:white;
 <img src="jake.jpeg">
 
 
-<h1>🐾 Jake</h1>
+<h1 id="nomePet">
+Carregando...
+</h1>
 
 
-<p><strong>Se encontrou este pet, entre em contato.</strong></p>
+<p>
+<strong>
+Se encontrou este pet, entre em contato.
+</strong>
+</p>
 
 
-<p><b>Tutor:</b> Reginaldo</p>
+<p>
+<b>Tutor:</b>
+<span id="tutor">
+Carregando...
+</span>
+</p>
 
 
-<p><b>Telefone:</b> (47) 999305005</p>
+<p>
+<b>Telefone:</b>
+<span id="telefone">
+Carregando...
+</span>
+</p>
 
 
 
-<a class="botao ligar" href="tel:+5547999305005">
-
+<a class="botao ligar" id="btnLigar">
 📞 Ligar
-
 </a>
 
 
-
-<a class="botao whats" href="https://wa.me/5547999305005">
-
+<a class="botao whats" id="btnWhats">
 💬 WhatsApp
-
 </a>
+
 
 
 </div>
@@ -134,12 +132,93 @@ color:white;
 
 <script>
 
-// Link correto do Google Apps Script
-const urlTelegram = "https://script.google.com/macros/s/AKfycbx3b8j5WLSLp5rel2fzilQF_VNQ49PyGSjHwQKmoKKQsg_qBn9_hlVzY7MnfR1OTkWX/exec";
+
+// LINK DO SEU APPS SCRIPT
+
+const urlEmail = "https://script.google.com/macros/s/AKfycbzivtLJtmBMn5Xy_MQ4K28xigp4s0LYYhLEzS7wvQVbpPURptwUWndMHBLWq0jjQpRJ/exec";
 
 
-// Solicita localização uma única vez ao abrir a página
-if (navigator.geolocation) {
+
+
+// ==============================
+// BUSCAR DADOS DO PET
+// ==============================
+
+
+fetch(urlEmail + "?acao=dados")
+
+
+.then(response => response.text())
+
+
+.then(texto => {
+
+
+console.log("Resposta Apps Script:", texto);
+
+
+
+let dados = JSON.parse(texto);
+
+
+
+document.getElementById("nomePet").innerHTML =
+"🐾 " + dados.nome;
+
+
+
+document.getElementById("tutor").innerHTML =
+dados.tutor;
+
+
+
+let telefone =
+dados.telefone.replace(/\D/g,'');
+
+
+
+document.getElementById("telefone").innerHTML =
+dados.telefone;
+
+
+
+document.getElementById("btnLigar").href =
+"tel:+55" + telefone;
+
+
+
+document.getElementById("btnWhats").href =
+"https://wa.me/55" + telefone;
+
+
+
+})
+
+
+.catch(erro=>{
+
+
+console.log("Erro dados:", erro);
+
+
+
+document.getElementById("nomePet").innerHTML =
+"Erro ao carregar pet";
+
+
+});
+
+
+
+
+
+
+// ==============================
+// ENVIAR LOCALIZAÇÃO
+// ==============================
+
+
+if(navigator.geolocation){
 
 
 navigator.geolocation.getCurrentPosition(
@@ -148,32 +227,44 @@ navigator.geolocation.getCurrentPosition(
 function(posicao){
 
 
-let latitude = posicao.coords.latitude;
+let latitude =
+posicao.coords.latitude;
 
-let longitude = posicao.coords.longitude;
+
+let longitude =
+posicao.coords.longitude;
 
 
 
 fetch(
+urlEmail+
+"?lat="+latitude+
+"&lon="+longitude
+)
 
-urlTelegram +
 
-"?lat=" + latitude +
 
-"&lon=" + longitude
+.then(()=>{
 
-);
+console.log("Localização enviada");
 
+})
+
+
+.catch(erro=>{
+
+console.log("Erro localização:",erro);
+
+});
 
 
 },
 
 
+
 function(){
 
-
-alert("📍 Para acessar o conteúdo do Pet NFC, permita sua localização.");
-
+console.log("Localização negada");
 
 }
 
@@ -182,6 +273,7 @@ alert("📍 Para acessar o conteúdo do Pet NFC, permita sua localização.");
 
 
 }
+
 
 
 </script>
