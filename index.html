@@ -1,28 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pet NFC</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#e8f5e9;
+padding:30px;
+}
+
+.card{
+max-width:450px;
+margin:auto;
+background:white;
+border-radius:20px;
+padding:25px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+img{
+width:220px;
+height:220px;
+border-radius:50%;
+border:5px solid #4CAF50;
+object-fit:cover;
+margin-bottom:20px;
+}
+
+h1{
+color:#2E7D32;
+margin-bottom:15px;
+}
+
+p{
+font-size:18px;
+margin-bottom:10px;
+}
+
+.botao{
+display:block;
+padding:15px;
+margin:15px auto;
+width:100%;
+border-radius:10px;
+text-decoration:none;
+font-size:20px;
+font-weight:bold;
+}
+
+.ligar{
+background:#2196F3;
+color:white;
+}
+
+.whats{
+background:#25D366;
+color:white;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+
+<img src="jake.jpeg">
+
+
+<h1 id="nomePet">
+🐾 Carregando...
+</h1>
+
+
+<p>
+<strong>
+Se encontrou este pet, entre em contato.
+</strong>
+</p>
+
+
+<p>
+<b>Tutor:</b>
+<span id="tutor">Carregando...</span>
+</p>
+
+
+<p>
+<b>Telefone:</b>
+<span id="telefone">Carregando...</span>
+</p>
+
+
+<a class="botao ligar" id="btnLigar">
+📞 Ligar
+</a>
+
+
+<a class="botao whats" id="btnWhats">
+💬 WhatsApp
+</a>
+
+
+<p id="status">
+📍 Testando localização...
+</p>
+
+
+</div>
+
+
+
+
 <script>
 
 
-// =================================
-// LINK APPS SCRIPT
-// =================================
-
-
-const urlAppScript =
-
+const urlAppScript = 
 "https://script.google.com/macros/s/AKfycbzXKlxXJPCS_LBcAEzos6Gdl9yPvqnHpyOZytXP1IDZhpYvpUJTRVSQjhzgNMJPgN7k/exec";
 
 
 
-
-// =================================
-// BUSCAR DADOS DO PET
-// =================================
+// ================================
+// BUSCA DADOS
+// ================================
 
 
 fetch(urlAppScript + "?acao=dados")
 
-
-.then(resposta => resposta.json())
-
+.then(res => res.json())
 
 .then(dados => {
 
@@ -39,26 +162,21 @@ document.getElementById("telefone").innerHTML =
 dados.telefone;
 
 
-
 let telefone =
 dados.telefone.replace(/\D/g,'');
-
 
 
 document.getElementById("btnLigar").href =
 "tel:+55" + telefone;
 
 
-
 document.getElementById("btnWhats").href =
 "https://wa.me/55" + telefone;
 
 
-
 })
 
-
-.catch(erro => {
+.catch(erro=>{
 
 
 console.log("Erro dados:", erro);
@@ -73,23 +191,18 @@ document.getElementById("nomePet").innerHTML =
 
 
 
-
-
-// =================================
-// LOCALIZAÇÃO COM ERRO DETALHADO
-// =================================
+// ================================
+// GPS
+// ================================
 
 
 if(navigator.geolocation){
 
 
-
 navigator.geolocation.getCurrentPosition(
 
 
-
 function(posicao){
-
 
 
 let latitude =
@@ -101,57 +214,42 @@ posicao.coords.longitude;
 
 
 
-console.log("Latitude:", latitude);
-
-console.log("Longitude:", longitude);
-
+document.getElementById("status").innerHTML =
+"📍 GPS encontrado, enviando...";
 
 
 
 fetch(
 
 urlAppScript +
-
 "?lat=" +
-
 latitude +
-
 "&lon=" +
-
 longitude
 
 )
 
 
-
-.then(resposta => resposta.text())
-
-
-.then(resultado => {
+.then(res=>res.text())
 
 
-console.log("Resposta servidor:", resultado);
+.then(resultado=>{
 
+
+console.log(resultado);
 
 
 document.getElementById("status").innerHTML =
-
 "✅ Localização enviada";
 
 
 })
 
-
-
-.catch(erro => {
-
-
-console.log("Erro envio:", erro);
+.catch(erro=>{
 
 
 document.getElementById("status").innerHTML =
-
-"❌ Erro ao enviar localização";
+"❌ Erro envio";
 
 
 });
@@ -162,20 +260,16 @@ document.getElementById("status").innerHTML =
 
 
 
-
 function(erro){
 
 
-
-console.log("Erro GPS:", erro);
+console.log(erro);
 
 
 
 document.getElementById("status").innerHTML =
 
-
 "⚠️ Erro GPS: " + erro.message;
-
 
 
 }
@@ -185,7 +279,6 @@ document.getElementById("status").innerHTML =
 );
 
 
-
 }
 
 else{
@@ -193,7 +286,7 @@ else{
 
 document.getElementById("status").innerHTML =
 
-"❌ Este navegador não suporta localização";
+"❌ GPS não suportado";
 
 
 }
@@ -201,3 +294,8 @@ document.getElementById("status").innerHTML =
 
 
 </script>
+
+
+</body>
+
+</html>
