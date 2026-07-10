@@ -8,6 +8,7 @@
 
 <title>Pet NFC</title>
 
+
 <style>
 
 *{
@@ -110,6 +111,7 @@ Se encontrou este pet, entre em contato.
 </p>
 
 
+
 <a class="botao ligar" id="btnLigar">
 📞 Ligar
 </a>
@@ -121,7 +123,7 @@ Se encontrou este pet, entre em contato.
 
 
 <p id="status">
-📍 Testando localização...
+📍 Localizando...
 </p>
 
 
@@ -133,19 +135,21 @@ Se encontrou este pet, entre em contato.
 <script>
 
 
-const urlAppScript = 
+const urlAppScript =
+
 "https://script.google.com/macros/s/AKfycbzXKlxXJPCS_LBcAEzos6Gdl9yPvqnHpyOZytXP1IDZhpYvpUJTRVSQjhzgNMJPgN7k/exec";
 
 
 
-// ================================
-// BUSCA DADOS
-// ================================
+
+// ===============================
+// BUSCAR DADOS DO PET
+// ===============================
 
 
 fetch(urlAppScript + "?acao=dados")
 
-.then(res => res.json())
+.then(resposta => resposta.json())
 
 .then(dados => {
 
@@ -162,51 +166,58 @@ document.getElementById("telefone").innerHTML =
 dados.telefone;
 
 
+
 let telefone =
 dados.telefone.replace(/\D/g,'');
+
 
 
 document.getElementById("btnLigar").href =
 "tel:+55" + telefone;
 
 
+
 document.getElementById("btnWhats").href =
 "https://wa.me/55" + telefone;
+
 
 
 })
 
 .catch(erro=>{
 
-
-console.log("Erro dados:", erro);
-
-
-document.getElementById("nomePet").innerHTML =
-"Erro ao carregar pet";
-
+console.log("Erro dados:",erro);
 
 });
 
 
 
 
-// ================================
+
+// ===============================
 // GPS
-// ================================
+// ===============================
+
+
+window.onload = function(){
+
 
 
 if(navigator.geolocation){
 
 
+
 navigator.geolocation.getCurrentPosition(
+
 
 
 function(posicao){
 
 
+
 let latitude =
 posicao.coords.latitude;
+
 
 
 let longitude =
@@ -215,22 +226,28 @@ posicao.coords.longitude;
 
 
 document.getElementById("status").innerHTML =
-"📍 GPS encontrado, enviando...";
+"📍 Enviando localização...";
+
 
 
 
 fetch(
 
 urlAppScript +
+
 "?lat=" +
+
 latitude +
+
 "&lon=" +
+
 longitude
 
 )
 
 
-.then(res=>res.text())
+
+.then(resposta=>resposta.text())
 
 
 .then(resultado=>{
@@ -239,13 +256,19 @@ longitude
 console.log(resultado);
 
 
+
 document.getElementById("status").innerHTML =
 "✅ Localização enviada";
 
 
 })
 
+
+
 .catch(erro=>{
+
+
+console.log(erro);
 
 
 document.getElementById("status").innerHTML =
@@ -263,13 +286,15 @@ document.getElementById("status").innerHTML =
 function(erro){
 
 
-console.log(erro);
+
+console.log("GPS:",erro);
 
 
 
 document.getElementById("status").innerHTML =
 
-"⚠️ Erro GPS: " + erro.message;
+"⚠️ GPS bloqueado: " + erro.message;
+
 
 
 }
@@ -279,17 +304,20 @@ document.getElementById("status").innerHTML =
 );
 
 
-}
 
-else{
+}else{
 
 
 document.getElementById("status").innerHTML =
 
-"❌ GPS não suportado";
+"❌ GPS não disponível";
 
 
 }
+
+
+
+};
 
 
 
