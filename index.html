@@ -8,6 +8,7 @@
 
 <title>Pet NFC</title>
 
+
 <style>
 
 *{
@@ -25,48 +26,39 @@ padding:30px;
 
 
 .card{
-
 max-width:450px;
 margin:auto;
 background:white;
 border-radius:20px;
 padding:25px;
 text-align:center;
-box-shadow:0 5px20px rgba(0,0,0,.2);
-
+box-shadow:0 5px 20px rgba(0,0,0,.2);
 }
 
 
 img{
-
 width:220px;
 height:220px;
 border-radius:50%;
 border:5px solid #4CAF50;
 object-fit:cover;
 margin-bottom:20px;
-
 }
 
 
 h1{
-
 color:#2E7D32;
 margin-bottom:15px;
-
 }
 
 
 p{
-
 font-size:18px;
 margin-bottom:10px;
-
 }
 
 
 .botao{
-
 display:block;
 padding:15px;
 margin:15px auto;
@@ -75,26 +67,22 @@ border-radius:10px;
 text-decoration:none;
 font-size:20px;
 font-weight:bold;
-
 }
 
 
 .ligar{
-
 background:#2196F3;
 color:white;
-
 }
 
 
 .whats{
-
 background:#25D366;
 color:white;
-
 }
 
 </style>
+
 
 </head>
 
@@ -137,31 +125,21 @@ Carregando...
 
 
 
-<a 
-class="botao ligar"
-id="btnLigar">
-
+<a class="botao ligar" id="btnLigar">
 📞 Ligar
-
 </a>
 
 
-
-<a 
-class="botao whats"
-id="btnWhats">
-
+<a class="botao whats" id="btnWhats">
 💬 WhatsApp
-
 </a>
 
 
 
 <p id="status">
-
-📍 Obtendo localização...
-
+📍 Buscando localização...
 </p>
+
 
 
 </div>
@@ -173,13 +151,14 @@ id="btnWhats">
 
 
 // =================================
-// LINK DO APPS SCRIPT
+// LINK APPS SCRIPT
 // =================================
 
 
 const urlAppScript =
 
 "https://script.google.com/macros/s/AKfycbzh1lPHaqB0ZAKvco0BGosg2yqy8UMwoEyWVNHy2NbXss7G7_Tij5igNPlxze3wb5WT/exec";
+
 
 
 
@@ -198,6 +177,9 @@ fetch(urlAppScript + "?acao=dados")
 .then(dados => {
 
 
+console.log("Dados recebidos:", dados);
+
+
 
 document.getElementById("nomePet").innerHTML =
 
@@ -214,7 +196,6 @@ dados.tutor;
 document.getElementById("telefone").innerHTML =
 
 dados.telefone;
-
 
 
 
@@ -239,9 +220,7 @@ document.getElementById("btnWhats").href =
 })
 
 
-
 .catch(erro => {
-
 
 
 console.log("Erro dados:", erro);
@@ -268,13 +247,10 @@ document.getElementById("nomePet").innerHTML =
 if(navigator.geolocation){
 
 
-
 navigator.geolocation.getCurrentPosition(
 
 
-
 function(posicao){
-
 
 
 let latitude =
@@ -286,6 +262,7 @@ posicao.coords.latitude;
 let longitude =
 
 posicao.coords.longitude;
+
 
 
 
@@ -308,12 +285,10 @@ longitude
 .then(resposta => resposta.text())
 
 
-
 .then(resultado => {
 
 
-
-console.log(resultado);
+console.log("Localização:", resultado);
 
 
 
@@ -322,16 +297,33 @@ document.getElementById("status").innerHTML =
 "✅ Localização enviada";
 
 
-});
+})
 
+
+
+.catch(erro=>{
+
+
+console.log("Erro localização:",erro);
+
+
+
+document.getElementById("status").innerHTML =
+
+"❌ Erro ao enviar localização";
+
+
+});
 
 
 },
 
 
 
-function(){
+function(erro){
 
+
+console.log("GPS:",erro);
 
 
 document.getElementById("status").innerHTML =
@@ -346,8 +338,8 @@ document.getElementById("status").innerHTML =
 );
 
 
-
 }
+
 
 
 </script>
