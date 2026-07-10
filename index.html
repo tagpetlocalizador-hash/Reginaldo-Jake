@@ -125,7 +125,6 @@ Carregando...
 </a>
 
 
-
 </div>
 
 
@@ -133,7 +132,7 @@ Carregando...
 <script>
 
 
-// LINK DO SEU APPS SCRIPT
+// LINK DO APPS SCRIPT
 
 const urlEmail = "https://script.google.com/macros/s/AKfycbyZNSYY6kO4N3z7lJhzNYiBDCn0pI87yH_Ezb3i4tkJfGiro9k7Z34TK2iJ5kiGOJ5a/exec";
 
@@ -148,23 +147,14 @@ const urlEmail = "https://script.google.com/macros/s/AKfycbyZNSYY6kO4N3z7lJhzNYi
 fetch(urlEmail + "?acao=dados")
 
 
-.then(response => response.text())
+.then(response => response.json())
 
 
-.then(texto => {
-
-
-console.log("Resposta Apps Script:", texto);
-
-
-
-let dados = JSON.parse(texto);
-
+.then(dados => {
 
 
 document.getElementById("nomePet").innerHTML =
 "🐾 " + dados.nome;
-
 
 
 document.getElementById("tutor").innerHTML =
@@ -201,12 +191,12 @@ document.getElementById("btnWhats").href =
 console.log("Erro dados:", erro);
 
 
-
 document.getElementById("nomePet").innerHTML =
 "Erro ao carregar pet";
 
 
 });
+
 
 
 
@@ -236,35 +226,59 @@ posicao.coords.longitude;
 
 
 
+console.log("Latitude:", latitude);
+
+console.log("Longitude:", longitude);
+
+
+
 fetch(
-urlEmail+
-"?lat="+latitude+
-"&lon="+longitude
+urlEmail +
+"?lat=" + latitude +
+"&lon=" + longitude
 )
 
 
+.then(response => response.text())
 
-.then(()=>{
 
-console.log("Localização enviada");
+.then(resposta => {
+
+
+console.log(
+"Resposta Apps Script:",
+resposta
+);
+
 
 })
 
 
 .catch(erro=>{
 
-console.log("Erro localização:",erro);
+
+console.log(
+"Erro localização:",
+erro
+);
+
 
 });
+
 
 
 },
 
 
 
-function(){
+function(erro){
 
-console.log("Localização negada");
+
+console.log(
+"Erro GPS:",
+erro
+);
+
 
 }
 
@@ -273,7 +287,6 @@ console.log("Localização negada");
 
 
 }
-
 
 
 </script>
