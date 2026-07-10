@@ -18,12 +18,15 @@ box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
 }
 
+
 body{
 background:#e8f5e9;
 padding:30px;
 }
 
+
 .card{
+
 max-width:450px;
 margin:auto;
 background:white;
@@ -31,28 +34,40 @@ border-radius:20px;
 padding:25px;
 text-align:center;
 box-shadow:0 5px 20px rgba(0,0,0,.2);
+
 }
 
+
 img{
+
 width:220px;
 height:220px;
 border-radius:50%;
 border:5px solid #4CAF50;
 object-fit:cover;
 margin-bottom:20px;
+
 }
+
 
 h1{
+
 color:#2E7D32;
 margin-bottom:15px;
+
 }
+
 
 p{
+
 font-size:18px;
 margin-bottom:10px;
+
 }
 
+
 .botao{
+
 display:block;
 padding:15px;
 margin:15px auto;
@@ -61,17 +76,35 @@ border-radius:10px;
 text-decoration:none;
 font-size:20px;
 font-weight:bold;
+border:none;
+cursor:pointer;
+
 }
+
 
 .ligar{
+
 background:#2196F3;
 color:white;
+
 }
 
+
 .whats{
+
 background:#25D366;
 color:white;
+
 }
+
+
+.local{
+
+background:#4CAF50;
+color:white;
+
+}
+
 
 </style>
 
@@ -122,9 +155,17 @@ Se encontrou este pet, entre em contato.
 </a>
 
 
+
+<button class="botao local" id="localizar">
+📍 Enviar localização
+</button>
+
+
+
 <p id="status">
-📍 Localizando...
+Aguardando...
 </p>
+
 
 
 </div>
@@ -132,8 +173,11 @@ Se encontrou este pet, entre em contato.
 
 
 
+
 <script>
 
+
+// LINK DO APPS SCRIPT
 
 const urlAppScript =
 
@@ -149,7 +193,9 @@ const urlAppScript =
 
 fetch(urlAppScript + "?acao=dados")
 
+
 .then(resposta => resposta.json())
+
 
 .then(dados => {
 
@@ -186,7 +232,7 @@ document.getElementById("btnWhats").href =
 
 .catch(erro=>{
 
-console.log("Erro dados:",erro);
+console.log(erro);
 
 });
 
@@ -194,12 +240,19 @@ console.log("Erro dados:",erro);
 
 
 
+
+
 // ===============================
-// GPS
+// BOTÃO LOCALIZAÇÃO
 // ===============================
 
 
-window.onload = function(){
+document.getElementById("localizar").onclick = function(){
+
+
+
+document.getElementById("status").innerHTML =
+"📍 Buscando localização...";
 
 
 
@@ -219,14 +272,20 @@ let latitude =
 posicao.coords.latitude;
 
 
-
 let longitude =
 posicao.coords.longitude;
 
 
 
+console.log(latitude);
+
+console.log(longitude);
+
+
+
 document.getElementById("status").innerHTML =
 "📍 Enviando localização...";
+
 
 
 
@@ -256,7 +315,6 @@ longitude
 console.log(resultado);
 
 
-
 document.getElementById("status").innerHTML =
 "✅ Localização enviada";
 
@@ -272,7 +330,7 @@ console.log(erro);
 
 
 document.getElementById("status").innerHTML =
-"❌ Erro envio";
+"❌ Erro ao enviar";
 
 
 });
@@ -286,14 +344,12 @@ document.getElementById("status").innerHTML =
 function(erro){
 
 
-
-console.log("GPS:",erro);
-
+console.log(erro);
 
 
 document.getElementById("status").innerHTML =
 
-"⚠️ GPS bloqueado: " + erro.message;
+"❌ Erro GPS: " + erro.message;
 
 
 
@@ -305,7 +361,9 @@ document.getElementById("status").innerHTML =
 
 
 
-}else{
+}
+
+else{
 
 
 document.getElementById("status").innerHTML =
