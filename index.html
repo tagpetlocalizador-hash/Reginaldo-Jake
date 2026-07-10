@@ -26,6 +26,7 @@ padding:30px;
 
 
 .card{
+
 max-width:450px;
 margin:auto;
 background:white;
@@ -33,32 +34,40 @@ border-radius:20px;
 padding:25px;
 text-align:center;
 box-shadow:0 5px 20px rgba(0,0,0,.2);
+
 }
 
 
 img{
+
 width:220px;
 height:220px;
 border-radius:50%;
 border:5px solid #4CAF50;
 object-fit:cover;
 margin-bottom:20px;
+
 }
 
 
 h1{
+
 color:#2E7D32;
 margin-bottom:15px;
+
 }
 
 
 p{
+
 font-size:18px;
 margin-bottom:10px;
+
 }
 
 
 .botao{
+
 display:block;
 padding:15px;
 margin:15px auto;
@@ -67,18 +76,23 @@ border-radius:10px;
 text-decoration:none;
 font-size:20px;
 font-weight:bold;
+
 }
 
 
 .ligar{
+
 background:#2196F3;
 color:white;
+
 }
 
 
 .whats{
+
 background:#25D366;
 color:white;
+
 }
 
 </style>
@@ -96,9 +110,11 @@ color:white;
 <img src="jake.jpeg">
 
 
+
 <h1 id="nomePet">
 🐾 Carregando...
 </h1>
+
 
 
 <p>
@@ -108,12 +124,14 @@ Se encontrou este pet, entre em contato.
 </p>
 
 
+
 <p>
 <b>Tutor:</b>
 <span id="tutor">
 Carregando...
 </span>
 </p>
+
 
 
 <p>
@@ -125,19 +143,32 @@ Carregando...
 
 
 
-<a class="botao ligar" id="btnLigar">
+
+<a 
+class="botao ligar"
+id="btnLigar">
+
 📞 Ligar
+
 </a>
 
 
-<a class="botao whats" id="btnWhats">
+
+<a 
+class="botao whats"
+id="btnWhats">
+
 💬 WhatsApp
+
 </a>
+
 
 
 
 <p id="status">
+
 📍 Buscando localização...
+
 </p>
 
 
@@ -147,17 +178,18 @@ Carregando...
 
 
 
+
 <script>
 
 
 // =================================
-// LINK APPS SCRIPT
+// LINK APPS SCRIPT FUNCIONANDO
 // =================================
 
 
 const urlAppScript =
 
-"https://script.google.com/macros/s/AKfycbzh1lPHaqB0ZAKvco0BGosg2yqy8UMwoEyWVNHy2NbXss7G7_Tij5igNPlxze3wb5WT/exec";
+"https://script.google.com/macros/s/AKfycbzXKlxXJPCS_LBcAEzos6Gdl9yPvqnHpyOZytXP1IDZhpYvpUJTRVSQjhzgNMJPgN7k/exec";
 
 
 
@@ -175,9 +207,6 @@ fetch(urlAppScript + "?acao=dados")
 
 
 .then(dados => {
-
-
-console.log("Dados recebidos:", dados);
 
 
 
@@ -220,11 +249,11 @@ document.getElementById("btnWhats").href =
 })
 
 
+
 .catch(erro => {
 
 
 console.log("Erro dados:", erro);
-
 
 
 document.getElementById("nomePet").innerHTML =
@@ -239,18 +268,22 @@ document.getElementById("nomePet").innerHTML =
 
 
 
+
 // =================================
-// ENVIAR LOCALIZAÇÃO
+// ENVIAR LOCALIZAÇÃO PARA TELEGRAM
 // =================================
 
 
 if(navigator.geolocation){
 
 
+
 navigator.geolocation.getCurrentPosition(
 
 
+
 function(posicao){
+
 
 
 let latitude =
@@ -262,6 +295,7 @@ posicao.coords.latitude;
 let longitude =
 
 posicao.coords.longitude;
+
 
 
 
@@ -285,10 +319,12 @@ longitude
 .then(resposta => resposta.text())
 
 
+
 .then(resultado => {
 
 
-console.log("Localização:", resultado);
+
+console.log(resultado);
 
 
 
@@ -301,19 +337,21 @@ document.getElementById("status").innerHTML =
 
 
 
-.catch(erro=>{
+.catch(erro => {
 
 
-console.log("Erro localização:",erro);
+
+console.log("Erro localização:", erro);
 
 
 
 document.getElementById("status").innerHTML =
 
-"❌ Erro ao enviar localização";
+"❌ Erro ao enviar";
 
 
 });
+
 
 
 },
@@ -323,7 +361,8 @@ document.getElementById("status").innerHTML =
 function(erro){
 
 
-console.log("GPS:",erro);
+console.log(erro);
+
 
 
 document.getElementById("status").innerHTML =
@@ -338,11 +377,13 @@ document.getElementById("status").innerHTML =
 );
 
 
+
 }
 
 
 
 </script>
+
 
 
 </body>
