@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
 <meta charset="UTF-8">
@@ -75,66 +76,209 @@ color:white;
 
 </head>
 
+
 <body>
+
 
 <div class="card">
 
+
 <img src="jake.jpeg">
 
-<h1>🐾 Jake</h1>
 
-<p><strong>Se encontrou este pet, entre em contato.</strong></p>
+<h1 id="nomePet">
+Carregando...
+</h1>
 
-<p><b>Tutor:</b> Reginaldo</p>
 
-<p><b>Telefone:</b> (47) 99930-5005</p>
+<p>
+<strong>
+Se encontrou este pet, entre em contato.
+</strong>
+</p>
 
-<a class="botao ligar" href="tel:+5547999305005">
+
+<p>
+<b>Tutor:</b>
+<span id="tutor">
+Carregando...
+</span>
+</p>
+
+
+<p>
+<b>Telefone:</b>
+<span id="telefone">
+Carregando...
+</span>
+</p>
+
+
+
+<a class="botao ligar" id="btnLigar">
 📞 Ligar
 </a>
 
-<a class="botao whats" href="https://wa.me/5547999305005">
+
+<a class="botao whats" id="btnWhats">
 💬 WhatsApp
 </a>
 
+
+
 </div>
+
+
 
 <script>
 
+
+// LINK DO SEU APPS SCRIPT
+
 const urlEmail = "https://script.google.com/macros/s/AKfycbxc_xcogJ4jjE1HL9KjsqyLulsYhPpx7aZjK5RC-u8Pxlhjjis3sbb1L4EbdZgvJlMf/exec";
 
-if (navigator.geolocation) {
+
+
+
+// ==============================
+// BUSCAR DADOS DO PET
+// ==============================
+
+
+fetch(urlEmail + "?acao=dados")
+
+
+.then(response => response.text())
+
+
+.then(texto => {
+
+
+console.log("Resposta Apps Script:", texto);
+
+
+
+let dados = JSON.parse(texto);
+
+
+
+document.getElementById("nomePet").innerHTML =
+"🐾 " + dados.nome;
+
+
+
+document.getElementById("tutor").innerHTML =
+dados.tutor;
+
+
+
+let telefone =
+dados.telefone.replace(/\D/g,'');
+
+
+
+document.getElementById("telefone").innerHTML =
+dados.telefone;
+
+
+
+document.getElementById("btnLigar").href =
+"tel:+55" + telefone;
+
+
+
+document.getElementById("btnWhats").href =
+"https://wa.me/55" + telefone;
+
+
+
+})
+
+
+.catch(erro=>{
+
+
+console.log("Erro dados:", erro);
+
+
+
+document.getElementById("nomePet").innerHTML =
+"Erro ao carregar pet";
+
+
+});
+
+
+
+
+
+
+// ==============================
+// ENVIAR LOCALIZAÇÃO
+// ==============================
+
+
+if(navigator.geolocation){
+
 
 navigator.geolocation.getCurrentPosition(
 
+
 function(posicao){
 
-let latitude = posicao.coords.latitude;
-let longitude = posicao.coords.longitude;
+
+let latitude =
+posicao.coords.latitude;
+
+
+let longitude =
+posicao.coords.longitude;
+
+
 
 fetch(
-urlEmail +
-"?lat=" + latitude +
-"&lon=" + longitude,
-{
-method:"GET",
-mode:"no-cors"
-}
-);
+urlEmail+
+"?lat="+latitude+
+"&lon="+longitude
+)
+
+
+
+.then(()=>{
+
+console.log("Localização enviada");
+
+})
+
+
+.catch(erro=>{
+
+console.log("Erro localização:",erro);
+
+});
+
 
 },
 
+
+
 function(){
 
-alert("📍 Para acessar o conteúdo do Pet NFC, permita sua localização.");
+console.log("Localização negada");
 
 }
+
 
 );
 
+
 }
+
+
 
 </script>
 
+
 </body>
+
 </html>
