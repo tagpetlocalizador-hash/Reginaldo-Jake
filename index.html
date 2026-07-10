@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Meu Pet</title>
+<title>Pet NFC</title>
 
 <style>
 
@@ -17,59 +17,81 @@ box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
 }
 
+
 body{
 background:#e8f5e9;
 padding:30px;
 }
 
+
 .card{
+
 max-width:450px;
 margin:auto;
 background:white;
 border-radius:20px;
 padding:25px;
 text-align:center;
-box-shadow:0 5px 20px rgba(0,0,0,.2);
+box-shadow:0 5px20px rgba(0,0,0,.2);
+
 }
 
+
 img{
+
 width:220px;
 height:220px;
 border-radius:50%;
 border:5px solid #4CAF50;
 object-fit:cover;
 margin-bottom:20px;
+
 }
+
 
 h1{
+
 color:#2E7D32;
 margin-bottom:15px;
+
 }
+
 
 p{
-margin-bottom:10px;
+
 font-size:18px;
+margin-bottom:10px;
+
 }
 
+
 .botao{
+
 display:block;
-margin:15px auto;
 padding:15px;
+margin:15px auto;
 width:100%;
 border-radius:10px;
 text-decoration:none;
 font-size:20px;
 font-weight:bold;
+
 }
+
 
 .ligar{
+
 background:#2196F3;
 color:white;
+
 }
 
+
 .whats{
+
 background:#25D366;
 color:white;
+
 }
 
 </style>
@@ -87,7 +109,7 @@ color:white;
 
 
 <h1 id="nomePet">
-Carregando...
+🐾 Carregando...
 </h1>
 
 
@@ -115,69 +137,101 @@ Carregando...
 
 
 
-<a class="botao ligar" id="btnLigar">
+<a 
+class="botao ligar"
+id="btnLigar">
+
 📞 Ligar
+
 </a>
 
 
-<a class="botao whats" id="btnWhats">
+
+<a 
+class="botao whats"
+id="btnWhats">
+
 💬 WhatsApp
+
 </a>
+
+
+
+<p id="status">
+
+📍 Obtendo localização...
+
+</p>
 
 
 </div>
 
 
 
+
 <script>
 
 
+// =================================
 // LINK DO APPS SCRIPT
-
-const urlEmail = "https://script.google.com/macros/s/AKfycbwA8kZSKi60S8RJG5UhIYfxieTURxx7USboMP5UOi_RqmMvsghNFO59gb0st-YzxLYA/exec";
-
+// =================================
 
 
+const urlAppScript =
 
-// ==============================
+"COLOQUE_AQUI_SEU_LINK_DO_APPSCRIPT";
+
+
+
+
+// =================================
 // BUSCAR DADOS DO PET
-// ==============================
+// =================================
 
 
-fetch(urlEmail + "?acao=dados")
+fetch(urlAppScript + "?acao=dados")
 
 
-.then(response => response.json())
+.then(resposta => resposta.json())
 
 
 .then(dados => {
 
 
+
 document.getElementById("nomePet").innerHTML =
+
 "🐾 " + dados.nome;
 
 
+
 document.getElementById("tutor").innerHTML =
+
 dados.tutor;
 
 
 
-let telefone =
-dados.telefone.replace(/\D/g,'');
-
-
-
 document.getElementById("telefone").innerHTML =
+
 dados.telefone;
 
 
 
+
+let telefone =
+
+dados.telefone.replace(/\D/g,'');
+
+
+
 document.getElementById("btnLigar").href =
+
 "tel:+55" + telefone;
 
 
 
 document.getElementById("btnWhats").href =
+
 "https://wa.me/55" + telefone;
 
 
@@ -185,13 +239,17 @@ document.getElementById("btnWhats").href =
 })
 
 
-.catch(erro=>{
+
+.catch(erro => {
+
 
 
 console.log("Erro dados:", erro);
 
 
+
 document.getElementById("nomePet").innerHTML =
+
 "Erro ao carregar pet";
 
 
@@ -202,65 +260,66 @@ document.getElementById("nomePet").innerHTML =
 
 
 
-
-// ==============================
+// =================================
 // ENVIAR LOCALIZAÇÃO
-// ==============================
+// =================================
 
 
 if(navigator.geolocation){
 
 
+
 navigator.geolocation.getCurrentPosition(
+
 
 
 function(posicao){
 
 
+
 let latitude =
+
 posicao.coords.latitude;
 
 
+
 let longitude =
+
 posicao.coords.longitude;
 
 
 
-console.log("Latitude:", latitude);
-
-console.log("Longitude:", longitude);
-
-
-
 fetch(
-urlEmail +
-"?lat=" + latitude +
-"&lon=" + longitude
+
+urlAppScript +
+
+"?lat=" +
+
+latitude +
+
+"&lon=" +
+
+longitude
+
 )
 
 
-.then(response => response.text())
+
+.then(resposta => resposta.text())
 
 
-.then(resposta => {
+
+.then(resultado => {
 
 
-console.log(
-"Resposta Apps Script:",
-resposta
-);
+
+console.log(resultado);
 
 
-})
 
+document.getElementById("status").innerHTML =
 
-.catch(erro=>{
-
-
-console.log(
-"Erro localização:",
-erro
-);
+"✅ Localização enviada";
 
 
 });
@@ -271,19 +330,21 @@ erro
 
 
 
-function(erro){
+function(){
 
 
-console.log(
-"Erro GPS:",
-erro
-);
+
+document.getElementById("status").innerHTML =
+
+"⚠️ Permita a localização";
 
 
 }
 
 
+
 );
+
 
 
 }
