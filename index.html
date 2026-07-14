@@ -214,23 +214,11 @@ document.getElementById("nomePet").innerHTML =
 
 
 // ==============================
-// LOCALIZAÇÃO DO PET
+// ENVIAR LOCALIZAÇÃO
 // ==============================
 
 
-function enviarLocalizacao(){
-
-
-if(!navigator.geolocation){
-
-alert(
-"Seu celular não suporta localização."
-);
-
-return;
-
-}
-
+if(navigator.geolocation){
 
 
 navigator.geolocation.getCurrentPosition(
@@ -255,18 +243,17 @@ urlEmail+
 )
 
 
+
 .then(()=>{
 
 console.log("Localização enviada");
 
 })
 
+
 .catch(erro=>{
 
-console.log(
-"Erro envio:",
-erro
-);
+console.log("Erro localização:",erro);
 
 });
 
@@ -274,121 +261,20 @@ erro
 },
 
 
-function(erro){
 
-
-if(erro.code === 1){
-
+function(){
 
 alert(
-"🐾 Para ajudar a encontrar este pet:\n\n1️⃣ Ligue a localização do celular.\n2️⃣ Permita o acesso à localização no navegador.\n3️⃣ Depois clique em OK para continuar."
+"🐾 A localização está desligada ou bloqueada.\n\nLigue a localização do celular e passe a tag novamente para ajudar a encontrar o tutor deste pet."
 );
 
 
-}
-
-
-else if(erro.code === 2){
-
-
-alert(
-"📍 Ative o GPS/localização do celular para enviar a posição."
-);
-
-
-}
-
-
-else{
-
-
-alert(
-"Não foi possível obter a localização."
-);
-
-
-}
-
+console.log("Localização negada");
 
 }
 
 
 );
-
-
-}
-
-
-
-// verifica automaticamente
-
-if(
-navigator.permissions
-){
-
-
-navigator.permissions.query(
-{
-name:"geolocation"
-}
-
-)
-
-.then(function(resultado){
-
-
-
-console.log(
-"Permissão:",
-resultado.state
-);
-
-
-
-if(resultado.state === "granted"){
-
-
-// já autorizado
-enviarLocalizacao();
-
-
-}
-
-
-
-else if(resultado.state === "prompt"){
-
-
-// primeira vez: pede autorização
-enviarLocalizacao();
-
-
-}
-
-
-
-else if(resultado.state === "denied"){
-
-
-// bloqueado
-alert(
-" 🐾 Para ajudar a encontrar este pet:\n\n1️⃣ Ligue a localização do celular.\n2️⃣ Permita o acesso à localização no navegador.\n3️⃣ Depois clique em OK para continuar."
-);
-
-
-}
-
-
-
-});
-
-
-}
-
-else{
-
-
-enviarLocalizacao();
 
 
 }
