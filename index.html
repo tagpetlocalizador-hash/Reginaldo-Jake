@@ -1,284 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Meu Pet</title>
-
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Meu Pet</title>
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-background:#e8f5e9;
-padding:30px;
-}
-
-.card{
-max-width:450px;
-margin:auto;
-background:white;
-border-radius:20px;
-padding:25px;
-text-align:center;
-box-shadow:0 5px 20px rgba(0,0,0,.2);
-}
-
-img{
-width:220px;
-height:220px;
-border-radius:50%;
-border:5px solid #4CAF50;
-object-fit:cover;
-margin-bottom:20px;
-}
-
-h1{
-color:#2E7D32;
-margin-bottom:15px;
-}
-
-p{
-margin-bottom:10px;
-font-size:18px;
-}
-
-.botao{
-display:block;
-margin:15px auto;
-padding:15px;
-width:100%;
-border-radius:10px;
-text-decoration:none;
-font-size:20px;
-font-weight:bold;
-}
-
-.ligar{
-background:#2196F3;
-color:white;
-}
-
-.whats{
-background:#25D366;
-color:white;
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{background:#e8f5e9;padding:30px}
+.card{max-width:450px;margin:auto;background:#fff;border-radius:20px;padding:25px;text-align:center;box-shadow:0 5px 20px rgba(0,0,0,.2)}
+img{width:220px;height:220px;border-radius:50%;border:5px solid #4CAF50;object-fit:cover;margin-bottom:20px}
+h1{color:#2E7D32;margin-bottom:15px}p{margin-bottom:10px;font-size:18px}
+.botao{display:block;margin:15px auto;padding:15px;width:100%;border-radius:10px;text-decoration:none;font-size:20px;font-weight:bold}
+.ligar{background:#2196F3;color:#fff}.whats{background:#25D366;color:#fff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;padding:20px}
+.modal-box{background:#fff;max-width:420px;width:100%;padding:25px;border-radius:20px;text-align:center}
+.modal-box h2{color:#2E7D32;margin-bottom:15px}.modal-box p{line-height:1.5;margin-bottom:20px}
+.modal-box button{width:100%;padding:15px;border:none;border-radius:10px;background:#4CAF50;color:#fff;font-size:18px;cursor:pointer}
+</style></head><body>
 <div class="card">
-
-
-<img src="jake.jpeg">
-
-
-<h1 id="nomePet">
-Carregando...
-</h1>
-
-
-<p>
-<strong>
-Se encontrou este pet, entre em contato.
-</strong>
-</p>
-
-
-<p>
-<b>Tutor:</b>
-<span id="tutor">
-Carregando...
-</span>
-</p>
-
-
-<p>
-<b>Telefone:</b>
-<span id="telefone">
-Carregando...
-</span>
-</p>
-
-
-
-<a class="botao ligar" id="btnLigar">
-📞 Ligar
-</a>
-
-
-<a class="botao whats" id="btnWhats">
-💬 WhatsApp
-</a>
-
-
-
+<img src="jake.jpeg"><h1 id="nomePet">Carregando...</h1>
+<p><strong>Se encontrou este pet, entre em contato.</strong></p>
+<p><b>Tutor:</b> <span id="tutor">Carregando...</span></p>
+<p><b>Telefone:</b> <span id="telefone">Carregando...</span></p>
+<a class="botao ligar" id="btnLigar">📞 Ligar</a>
+<a class="botao whats" id="btnWhats">💬 WhatsApp</a>
 </div>
-
-
-
+<div class="modal" id="modalGPS"><div class="modal-box">
+<h2>📍 Ative sua localização</h2>
+<p>Para ajudar o tutor a encontrar este pet, ative a localização do aparelho e permita o acesso quando solicitado.</p>
+<button onclick="enviarLocalizacao()">📍 Tentar novamente</button>
+</div></div>
 <script>
-
-
-// LINK DO SEU APPS SCRIPT
-
-const urlEmail = "https://script.google.com/macros/s/AKfycbzivtLJtmBMn5Xy_MQ4K28xigp4s0LYYhLEzS7wvQVbpPURptwUWndMHBLWq0jjQpRJ/exec";
-
-
-
-
-// ==============================
-// BUSCAR DADOS DO PET
-// ==============================
-
-
-fetch(urlEmail + "?acao=dados")
-
-
-.then(response => response.text())
-
-
-.then(texto => {
-
-
-console.log("Resposta Apps Script:", texto);
-
-
-
-let dados = JSON.parse(texto);
-
-
-
-document.getElementById("nomePet").innerHTML =
-"🐾 " + dados.nome;
-
-
-
-document.getElementById("tutor").innerHTML =
-dados.tutor;
-
-
-
-let telefone =
-dados.telefone.replace(/\D/g,'');
-
-
-
-document.getElementById("telefone").innerHTML =
-dados.telefone;
-
-
-
-document.getElementById("btnLigar").href =
-"tel:+55" + telefone;
-
-
-
-document.getElementById("btnWhats").href =
-"https://wa.me/55" + telefone;
-
-
-
-})
-
-
-.catch(erro=>{
-
-
-console.log("Erro dados:", erro);
-
-
-
-document.getElementById("nomePet").innerHTML =
-"Erro ao carregar pet";
-
-
-});
-
-
-
-
-
-
-// ==============================
-// ENVIAR LOCALIZAÇÃO
-// ==============================
-
-
-if(navigator.geolocation){
-
-
-navigator.geolocation.getCurrentPosition(
-
-
-function(posicao){
-
-
-let latitude =
-posicao.coords.latitude;
-
-
-let longitude =
-posicao.coords.longitude;
-
-
-
-fetch(
-urlEmail+
-"?lat="+latitude+
-"&lon="+longitude
-)
-
-
-
-.then(()=>{
-
-console.log("Localização enviada");
-
-})
-
-
-.catch(erro=>{
-
-console.log("Erro localização:",erro);
-
-});
-
-
-},
-
-
-
-function(){
-
-console.log("Localização negada");
-
+const urlEmail="https://script.google.com/macros/s/AKfycbzivtLJtmBMn5Xy_MQ4K28xigp4s0LYYhLEzS7wvQVbpPURptwUWndMHBLWq0jjQpRJ/exec";
+fetch(urlEmail+"?acao=dados").then(r=>r.json()).then(d=>{
+nomePet.innerHTML="🐾 "+d.nome;tutor.textContent=d.tutor;telefone.textContent=d.telefone;
+let t=d.telefone.replace(/\D/g,"");btnLigar.href="tel:+55"+t;btnWhats.href="https://wa.me/55"+t;
+}).catch(()=>nomePet.innerHTML="Erro ao carregar pet");
+function mostrar(){modalGPS.style.display="flex";}
+function esconder(){modalGPS.style.display="none";}
+function enviarLocalizacao(){
+if(!navigator.geolocation){mostrar();return;}
+navigator.geolocation.getCurrentPosition(p=>{
+esconder();
+fetch(urlEmail+"?lat="+p.coords.latitude+"&lon="+p.coords.longitude)
+.then(()=>console.log("Localização enviada"))
+.catch(()=>mostrar());
+},e=>{mostrar();},{enableHighAccuracy:true,timeout:10000,maximumAge:0});
 }
-
-
-);
-
-
-}
-
-
-
-</script>
-
-
-</body>
-
-</html>
+enviarLocalizacao();
+</script></body></html>
