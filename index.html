@@ -32,16 +32,98 @@ fetch(urlEmail+"?acao=dados").then(r=>r.json()).then(d=>{
 nomePet.innerHTML="🐾 "+d.nome;tutor.textContent=d.tutor;telefone.textContent=d.telefone;
 let t=d.telefone.replace(/\D/g,"");btnLigar.href="tel:+55"+t;btnWhats.href="https://wa.me/55"+t;
 }).catch(()=>nomePet.innerHTML="Erro ao carregar pet");
-function mostrar(){modalGPS.style.display="flex";}
-function esconder(){modalGPS.style.display="none";}
-function enviarLocalizacao(){
-if(!navigator.geolocation){mostrar();return;}
-navigator.geolocation.getCurrentPosition(p=>{
-esconder();
-fetch(urlEmail+"?lat="+p.coords.latitude+"&lon="+p.coords.longitude)
-.then(()=>console.log("Localização enviada"))
-.catch(()=>mostrar());
-},e=>{mostrar();},{enableHighAccuracy:true,timeout:10000,maximumAge:0});
+function mostrar() {
+    modalGPS.style.display = "flex";
 }
+
+function esconder() {
+    modalGPS.style.display = "none";
+}
+
+let localizacaoEnviada = false;
+
+function enviarLocalizacao() {
+
+    if (localizacaoEnviada) return;
+
+    if (!navigator.geolocation) {
+        mostrar();
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function (p) {
+
+            localizacaoEnviada = true;
+
+            esconder();
+
+            fetch(
+                urlEmail +
+                "?lat=" + p.coords.latitude +
+                "&lon=" + p.coords.longitude
+            )
+            .then(() => {
+                console.log("Localização enviada");
+            })
+            .catch(() => {
+                mostrar();
+            });
+
+        },
+
+        function (erro) {
+
+            console.log("Erro:", erro.code);
+
+            mostrar();
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+// Primeira tentativa
 enviarLocalizacao();
-</script></body></html>
+
+// Se o navegador suportar a API de permissões
+if (navigator.permissions) {
+
+    navigator.permissions
+        .query({ name: "geolocation" })
+        .then(function (permission) {
+
+            permission.onchange = function () {
+
+                console.log("Permissão:", permission.state);
+
+                if (permission.state === "granted") {
+
+                    enviarLocalizacao();
+
+                }
+
+            };
+
+        });
+
+}
+
+// Tenta novamente automaticamente a cada 5 segundos
+setInterval(function () {
+
+    if (!localizacaoEnviada) {
+
+        enviarLocalizacao();
+
+    }
+
+}, 5000);
